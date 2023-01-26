@@ -1,7 +1,19 @@
 package me.lucasfrederico.projetovotacao.dto;
 
-import lombok.Data;
+import lombok.*;
+import me.lucasfrederico.projetovotacao.domain.Associado;
 
 @Data
-public class PautaDTO {
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class AssociadoDTO {
+
+    private Long id;
+    private String nome;
+
+    public static AssociadoDTO toDTO(Associado associado) {
+        return builder().id(associado.getId()).nome(associado.getNome()).build();
+    }
+
 }

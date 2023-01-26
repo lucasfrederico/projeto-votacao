@@ -1,8 +1,7 @@
-package me.lucasfrederico.projetovotacao.service;
+package me.lucasfrederico.projetovotacao.integration;
 
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import me.lucasfrederico.projetovotacao.integration.RestClientFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
