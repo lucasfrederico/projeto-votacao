@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Repository;
 
@@ -13,8 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface AssociadoRepository extends JpaRepository<Associado, Long> {
 
     @Query("select new me.lucasfrederico.projetovotacao.dto.AssociadoDTO(a.id, a.nome) from Associado a where (?1 is null or upper(a.nome) like upper(concat('%', ?1, '%'))) order by a.nome")
-    Page<AssociadoDTO> findByNomeContainsIgnoreCaseOrderByNomeAsc(@Nullable String nome, Pageable pageable);
+    Page<AssociadoDTO> findByNomeContainsIgnoreCaseOrderByNomeAsc(@Param("nome") @Nullable String nome, @Param("pageable") Pageable pageable);
 
-    boolean existsByNomeIgnoreCase(String nome);
+    boolean existsByNomeIgnoreCase(@Param("nome") String nome);
 
 }

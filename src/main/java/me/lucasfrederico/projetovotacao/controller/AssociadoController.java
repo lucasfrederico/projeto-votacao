@@ -8,7 +8,6 @@ import me.lucasfrederico.projetovotacao.dto.StatusCPFParaVotacaoDTO;
 import me.lucasfrederico.projetovotacao.service.AssociadoService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,7 +24,7 @@ public class AssociadoController {
     }
 
     @GetMapping
-    public ResponseEntity<Page<AssociadoDTO>> listarAssociados(@Param("search") String search, Pageable pageable) {
+    public ResponseEntity<Page<AssociadoDTO>> listarAssociados(@RequestParam("search") String search, Pageable pageable) {
         return ResponseEntity.ok(associadoService.listarAssociados(search, pageable));
     }
 
