@@ -10,7 +10,7 @@ on:
       - /home/runner/work/**
   pull_request:
     types: [opened, synchronize, reopened]
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   build:
