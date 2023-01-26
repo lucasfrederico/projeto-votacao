@@ -27,7 +27,7 @@ jobs:
         cache: maven
 
     - name: Build with Maven
-      run: mvn -Dsurefire.useFile=false clean install
+      run: mvn -Ptest -Dsurefire.useFile=false clean install
 
     - name: Cache Maven packages
       uses: actions/cache@v1
