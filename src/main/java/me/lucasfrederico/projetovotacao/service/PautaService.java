@@ -14,6 +14,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
+/**
+ * {@link Service } responsável por concentrar a regra de negócio do domínio {@link Pauta}.
+ *
+ * @see PautaDTO
+ * @see ResultadoVotacaoComponent
+ */
 @Service
 @AllArgsConstructor
 public class PautaService {
@@ -22,6 +28,11 @@ public class PautaService {
     private final VotoRepository votoRepository;
     private final ResultadoVotacaoComponent resultadoVotacaoComponent;
 
+    /**
+     * Salvar uma nova pauta.
+     *
+     * @param novaPautaDTO Nova pauta à ser salva.
+     */
     public PautaDTO salvarNovaPauta(NovaPautaDTO novaPautaDTO) {
         if (pautaRepository.existsByTituloIgnoreCase(novaPautaDTO.getTitulo())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Já existe uma votação com esse título.");
@@ -36,6 +47,11 @@ public class PautaService {
         return PautaDTO.toDTO(pautaRepository.save(entity));
     }
 
+    /**
+     * Mostrar resumo de uma pauta por ID.
+     *
+     * @param pautaId ID da pauta.
+     */
     public PautaResumoDTO mostrarResumoPauta(Long pautaId) {
         if (!pautaRepository.existsById(pautaId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Votação não encontrada.");
@@ -50,7 +66,7 @@ public class PautaService {
         pautaResumo.setDataTermino(pauta.getDataTermino());
 
         if (pauta.prazoJaEncerrou()) {
-            var resultadoFinal = resultadoVotacaoComponent.getResultadoVotacaoOpcao(pauta);
+            var resultadoFinal = resultadoVotacaoComponent.obterResultadoVotacaoOpcao(pauta);
             pautaResumo.setResultadoFinal(resultadoFinal.getResultadoVotacaoEnum());
             pautaResumo.setTotalSim(resultadoFinal.getTotalSim());
             pautaResumo.setTotalNao(resultadoFinal.getTotalNao());
@@ -66,6 +82,11 @@ public class PautaService {
         return pautaResumo;
     }
 
+    /**
+     * Apagar pauta por ID.
+     *
+     * @param pautaId ID da pauta.
+     */
     public void apagarPauta(Long pautaId) {
         if (!pautaRepository.existsById(pautaId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Pauta não encontrada.");

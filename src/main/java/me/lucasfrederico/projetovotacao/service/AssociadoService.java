@@ -13,6 +13,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * {@link Service } responsável por concentrar a regra de negócio do domínio {@link Associado}
+ *
+ * @see AssociadoDTO
+ * @see CpfValidadorComponent
+ */
 @Service
 @AllArgsConstructor
 public class AssociadoService {
@@ -20,6 +26,11 @@ public class AssociadoService {
     private final AssociadoRepository associadoRepository;
     private final CpfValidadorComponent cpfValidadorComponent;
 
+    /**
+     * Salvar um novo associado.
+     *
+     * @param novoAssociadoDTO Novo associado à ser salvo.
+     */
     public AssociadoDTO salvarNovoAssociado(NovoAssociadoDTO novoAssociadoDTO) {
         if (associadoRepository.existsByNomeIgnoreCase(novoAssociadoDTO.getNome())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Associado já existe.");
@@ -32,10 +43,21 @@ public class AssociadoService {
         return AssociadoDTO.toDTO(associadoRepository.save(entity));
     }
 
+    /**
+     * Listar associados.
+     *
+     * @param search   Texto de pesquisa do client, para pesquisar pelo nome do associado (%nome%).
+     * @param pageable {@link Pageable} para aplicar a paginação.
+     */
     public Page<AssociadoDTO> listarAssociados(String search, Pageable pageable) {
         return associadoRepository.findByNomeContainsIgnoreCaseOrderByNomeAsc(search, pageable);
     }
 
+    /**
+     * Apagar associado por ID.
+     *
+     * @param associadoId ID do associado.
+     */
     public void apagarAssociado(Long associadoId) {
         if (!associadoRepository.existsById(associadoId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Associado não encontrado.");
@@ -44,6 +66,11 @@ public class AssociadoService {
         associadoRepository.deleteById(associadoId);
     }
 
+    /**
+     * Verificar se um CPF é válido para realizar um voto.
+     *
+     * @param cpf Cpf informado.
+     */
     public StatusCPFParaVotacaoDTO verificarCPFValidoParaVotacao(String cpf) {
         return new StatusCPFParaVotacaoDTO(cpfValidadorComponent.isValido(cpf));
     }

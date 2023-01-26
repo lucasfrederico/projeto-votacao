@@ -9,13 +9,26 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ResponseStatusException;
 
+/**
+ * {@link Component } responsável por processar o resultado final de uma votação.
+ *
+ * @see ResultadoVotacaoDTO
+ * @see PautaService
+ * @see VotoService
+ * @see VotoRepository
+ */
 @Component
 @RequiredArgsConstructor
 public class ResultadoVotacaoComponent {
 
     private final VotoRepository votoRepository;
 
-    public ResultadoVotacaoDTO getResultadoVotacaoOpcao(Pauta pauta) {
+    /**
+     * Obter as informações do resultado final de uma votação.
+     *
+     * @param pauta Pauta para analisar o resultado final.
+     */
+    public ResultadoVotacaoDTO obterResultadoVotacaoOpcao(Pauta pauta) {
         if (!pauta.prazoJaEncerrou()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "A votação ainda não terminou.");
         }

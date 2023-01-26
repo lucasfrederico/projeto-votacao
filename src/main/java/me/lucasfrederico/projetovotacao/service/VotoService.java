@@ -16,6 +16,12 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
 
+/**
+ * {@link Service } responsável pela regra de negócio do domínio {@link Voto}.
+ *
+ * @see VotoDTO
+ * @see ResultadoVotacaoComponent
+ */
 @Service
 @AllArgsConstructor
 public class VotoService {
@@ -25,6 +31,11 @@ public class VotoService {
     private final AssociadoRepository associadoRepository;
     private final ResultadoVotacaoComponent resultadoVotacaoComponent;
 
+    /**
+     * Cadastrar novo voto.
+     *
+     * @param novoVotoDTO Novo voto à ser cadastrado.
+     */
     public VotoDTO cadastrarNovoVoto(NovoVotoDTO novoVotoDTO) {
         if (!associadoRepository.existsById(novoVotoDTO.getAssociadoId())) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Associado não encontrado.");
@@ -40,7 +51,7 @@ public class VotoService {
 
         var pauta = pautaRepository.findById(novoVotoDTO.getVotacaoId()).orElseThrow();
         if (pauta.prazoJaEncerrou()) {
-            var resultadoPauta = resultadoVotacaoComponent.getResultadoVotacaoOpcao(pauta);
+            var resultadoPauta = resultadoVotacaoComponent.obterResultadoVotacaoOpcao(pauta);
 
             var sessaoEncerradaMensagem = String.format(
                     "A sessão dessa pauta já foi finalizada e o resultado foi: %s com %s votos (%s votos no total).",
@@ -61,6 +72,12 @@ public class VotoService {
         return VotoDTO.toDTO(votoRepository.save(entity));
     }
 
+    /**
+     * Listar votos de forma paginada.
+     *
+     * @param pautaId  ID da pauta.
+     * @param pageable {@link Pageable} para atribuir paginação.
+     */
     public Page<VotoDTO> listarVotos(Long pautaId, Pageable pageable) {
         if (!pautaRepository.existsById(pautaId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Votação não encontrada.");
@@ -69,6 +86,11 @@ public class VotoService {
         return votoRepository.findAllByPautaId(pautaId, pageable);
     }
 
+    /**
+     * Apagar voto por ID.
+     *
+     * @param votoId ID do voto.
+     */
     public void apagarVoto(Long votoId) {
         if (!votoRepository.existsById(votoId)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Voto não encontrado.");
