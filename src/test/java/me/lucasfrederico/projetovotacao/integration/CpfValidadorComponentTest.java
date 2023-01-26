@@ -1,7 +1,13 @@
 package me.lucasfrederico.projetovotacao.integration;
 
+import org.junit.Before;
 import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
+import org.mockito.junit.MockitoJUnitRunner;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
 /**
@@ -10,10 +16,16 @@ import org.springframework.boot.test.context.SpringBootTest;
  *  terceira, poderia ser outra aplicação (ou não), com essa lógica simples, sem necessitar de um serviço pago.
  */
 @SpringBootTest
+@RunWith(MockitoJUnitRunner.class)
 public class CpfValidadorComponentTest {
 
-    @Autowired
+    @InjectMocks
     private CpfValidadorComponent cpfValidadorComponent;
+
+    @Before
+    public void setUp() {
+         MockitoAnnotations.initMocks(this);
+    }
 
     @Test
     void validarCpfValidos() {
